@@ -1,0 +1,40 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - rm -rf node_modules package-lock.json
+      - echo Installing dependencies....
+      - npm cache clean --force
+      - npm install --include=dev
+      - npm install -g @nestjs/cli
+
+  build:
+    commands:
+      - echo Building the project...
+      - npm run build
+      - docker build --build-arg ENV_FILE=.env -t 727646491094.dkr.ecr.us-east-1.amazonaws.com/bluconnect-backend:latest .
+      - echo Logging in to ECR...
+      # Login no ECR (somente necessário para push no ECR)
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 727646491094.dkr.ecr.us-east-1.amazonaws.com
+      - echo Pushing the Docker image to ECR...
+      - docker push 727646491094.dkr.ecr.us-east-1.amazonaws.com/bluconnect-backend:latest
+      - echo "[{\"name\":\"bluconnect-backend\",\"imageUri\":\"727646491094.dkr.ecr.us-east-1.amazonaws.com/bluconnect-backend:latest\"}]" > imagedefinitions.json
+  
+  post_build:
+    commands:
+      - echo Build completed successfully
+
+artifacts:
+  files:
+    - dist/**     
+    - package.json 
+    - .env          
+    - imagedefinitions.json
+  discard-paths: no
+
+env:
+  variables:
+    NODE_ENV: "production"

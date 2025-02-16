@@ -1,0 +1,93 @@
+datasource bluconnect {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Trip {
+  id               Int              @id @default(autoincrement())
+  code             String           @unique
+  averageTime      Int
+  numberStops      Int
+  startBusStopId   Int
+  endBusStopId     Int
+  busRoutes        BusRoute[]       @relation("OriginBusRoutes")
+  startBusStop     BusStop          @relation("StartBusStopRelation", fields: [startBusStopId], references: [id], onDelete: Cascade)
+  endBusStop       BusStop          @relation("EndBusStopRelation", fields: [endBusStopId], references: [id], onDelete: Cascade)
+  TralvelSchedules TravelSchedule[]
+}
+
+model BusStop {
+  id         Int    @id @default(autoincrement())
+  name       String @unique
+  latitude   Float
+  longitude  Float
+  TripStarts Trip[] @relation("EndBusStopRelation")
+  TripEnds   Trip[] @relation("StartBusStopRelation")
+
+  BusRoute BusRoute[] @relation("BusStop")
+}
+
+model BusRoute {
+  id              Int     @id @default(autoincrement())
+  index           Int
+  trip            Trip    @relation("OriginBusRoutes", fields: [tripId], references: [id], onDelete: Cascade)
+  tripId          Int
+  busStop         BusStop @relation("BusStop", fields: [busStopId], references: [id], onDelete: Cascade)
+  busStopId       Int
+  averageTimePlus Int
+}
+
+model TravelSchedule {
+  id        Int     @id @default(autoincrement())
+  time      Int
+  trip      Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  tripId    Int
+  monday    Boolean @default(false)
+  tuesday   Boolean @default(false)
+  wednesday Boolean @default(false)
+  thursday  Boolean @default(false)
+  friday    Boolean @default(false)
+  saturday  Boolean @default(false)
+  sunday    Boolean @default(false)
+}
+
+enum HTTPMethod {
+  GET
+  POST
+  PUT
+  DELETE
+  PATCH
+  OPTIONS
+  HEAD
+}
+
+model Log {
+  id        Int        @id @default(autoincrement())
+  action    String
+  method    HTTPMethod
+  body      String?
+  query     String?
+  params    String?
+  url       String
+  model     String
+  timestamp DateTime   @default(now())
+  userId    Int
+  success   Boolean?
+  loading   Boolean
+  user      User       @relation("UserLog", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  name              String
+  password          String
+  resetPasswordCode String?
+  resetCodeExpires  DateTime?
+  active            Boolean
+  log               Log[]     @relation("UserLog")
+}

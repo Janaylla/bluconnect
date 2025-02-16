@@ -1,0 +1,11 @@
+{
+  "name": "root-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "(cd front && npm install) && (cd ../back && npm install)",
+    "build": "(cd front && npm run build) && (cd ../back && npm run build)",
+    "start": "start npm --prefix ./back start && start npm --prefix ./front start",
+    "dev": "npm --prefix ./front run dev & npm --prefix ./back run dev"
+  }
+}
