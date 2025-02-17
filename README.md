@@ -58,14 +58,14 @@ Após a instalação do PostgreSQL, crie um novo banco de dados para a aplicaç�
 ###### 2.3.3 Adicionar as variaveis do seu banco no .env
 ###### 2.3.4 Depois, execute as migrações do Prisma para criar as tabelas no banco de dados:
 
-```
+```sh
 npx prisma migrate dev --name init
 ```
 
 ### 2.4 Rodar o backend
 Inicie o servidor backend:
 
-```
+```sh
 npm run dev
 ```
 O backend estará rodando em http://localhost:4000.
@@ -75,21 +75,21 @@ O backend estará rodando em http://localhost:4000.
 ### 3.1 Instalar dependências
 Navegue até a pasta do frontend e instale as dependências:
 
-```
-cd ../front
+```sh
+cd front
 npm install
 ```
 ### 3.2 Configurar variáveis de ambiente
 Crie um arquivo .env na raiz do frontend (front) e defina a URL do backend:
 
-```
+```sh
 REACT_APP_BLUCONNECT_BASE_URL=http://localhost:4000
 ```
 
 ### 3.3 Rodar o frontend
 Inicie o servidor de desenvolvimento do frontend:
 
-```
+```sh
 npm run dev
 ```
 **O frontend estará rodando em http://localhost:3000.**
@@ -105,7 +105,7 @@ Agora que tanto o backend quanto o frontend estão rodando, você pode acessar a
 Para gerar uma versão de produção do frontend, execute:
 
 
-```
+```sh
 cd front
 npm run build
 
@@ -113,7 +113,7 @@ npm run build
 
 Depois, inicie o servidor em modo produção:
 
-```
+```sh
 cd back
 npm run start
 ```
@@ -121,17 +121,17 @@ npm run start
 Para gerar uma versão de produção do backend, execute:
 
 
-```
+```sh
 npm run build
 ```
 
 Depois, inicie o servidor em modo produção:
 
-```
+```sh
 npm run start
 ```
 
 ### ⁉️Problemas comuns
-######  Erros de conexão com o banco de dados: Verifique se o PostgreSQL está rodando e se as credenciais no .env estão corretas.
+**Erros de conexão com o banco de dados: Verifique se o PostgreSQL está rodando e se as credenciais no .env estão corretas.**
 
-###### Erros de dependências: Execute npm install novamente em ambas as pastas (blu-connect-back e blu-connect-front).
+**Erros de dependências: Execute npm install novamente em ambas as pastas (blu-connect-back e blu-connect-front).**
