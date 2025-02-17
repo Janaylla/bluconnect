@@ -1,5 +1,5 @@
 # Blu Connect
-#### 📋Pré-requisitos
+## 📋Pré-requisitos
 Antes de começar, certifique-se de ter instalado os seguintes softwares em sua máquina:
 
 **Node.js** (versão 18 ou superior)
@@ -117,7 +117,7 @@ Depois, inicie o servidor em modo produção:
 cd back
 npm run start
 ```
-## 3.2 Build do backend
+## 5.2 Build do backend
 Para gerar uma versão de produção do backend, execute:
 
 
