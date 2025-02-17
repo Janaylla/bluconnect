@@ -1,139 +1,137 @@
 # Blu Connect
+#### 📋Pré-requisitos
+Antes de começar, certifique-se de ter instalado os seguintes softwares em sua máquina:
 
-Este é o projeto Blu Connect, uma aplicação com frontend em React e backend em NestJS.
+**Node.js** (versão 18 ou superior)
 
-## Requisitos
+**npm** (geralmente vem com o Node.js)
 
-Antes de rodar a aplicação, você precisa ter instalado:
+**Git** (para clonar o repositório)
 
-- **Node.js** (recomendo a versão 16 ou superior)
-- **npm** (gerenciador de pacotes do Node.js)
-- **Docker** (caso deseje usar o Docker para o banco de dados)
+### 1️⃣ Clone o repositório
+Clone o repositório do projeto para o seu ambiente local:
 
-## Rodando a aplicação localmente
+```sh
+git clone https://github.com/seu-usuario/blu-connect.git
+```
+### 2️⃣: Configurar o Backend
+2.1 Instalar dependências
+Navegue até a pasta do backend e instale as dependências:
 
-### 1. Configuração do Frontend
-
-#### Passo 1: Instalar dependências
-
-1. Navegue até a pasta do frontend (`blu-connect-front`):
-   ```bash
-   cd front
-Instale as dependências:
-bash
-Copiar
-Editar
-npm install
-Passo 2: Configurar variáveis de ambiente
-Na raiz do projeto frontend, crie um arquivo .env e adicione a seguinte variável:
-bash
-Copiar
-Editar
-REACT_APP_BLUCONNECT_BASE_URL=http://localhost:4000
-Passo 3: Iniciar o servidor de desenvolvimento
-Execute o comando abaixo para iniciar o frontend:
-
-bash
-Copiar
-Editar
-npm run dev
-O frontend estará disponível em http://localhost:3000.
-
-2. Configuração do Backend
-Passo 1: Instalar dependências
-Navegue até a pasta do backend (blu-connect-back):
-
-bash
-Copiar
-Editar
+```sh
 cd back
-Instale as dependências:
-
-bash
-Copiar
-Editar
 npm install
-Passo 2: Configurar variáveis de ambiente
-Na raiz do projeto backend, crie um arquivo .env e adicione as seguintes variáveis (consulte as configurações corretas para seu banco de dados e outras credenciais):
-bash
-Copiar
-Editar
+```
+
+##### 2.2 Configurar variáveis de ambiente
+Crie um arquivo .env na raiz do backend (back) e preencha com as variáveis de ambiente necessárias. Use o arquivo env.exemple como referência:
+
+```sh
 BACKEND_PORT=4000
 BACKEND_DATABASE_TZ=UTC
 BACKEND_DATABASE_DIALECT=postgres
-BACKEND_DATABASE=
-BACKEND_DATABASE_USER=
-BACKEND_DATABASE_HOST=
-BACKEND_DATABASE_PASSWORD=
+BACKEND_DATABASE=seu_banco_de_dados
+BACKEND_DATABASE_USER=seu_usuario
+BACKEND_DATABASE_HOST=localhost
+BACKEND_DATABASE_PASSWORD=sua_senha
 BACKEND_DATABASE_PORT=5432
-DATABASE_URL=
-ADMIN_EMAIL=
-ADMIN_PASSWORD=
-ADMIN_NAME=
+DATABASE_URL=postgresql://seu_usuario:sua_senha@localhost:5432/seu_banco_de_dados
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=senha_admin
+ADMIN_NAME=Admin
 
-AWS_REGION=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-EMAIL_USER=
-JWT_SECRET=
-Passo 3: Rodar o servidor backend
-Execute o comando abaixo para rodar o backend:
+AWS_REGION=sua_regiao
+AWS_ACCESS_KEY_ID=sua_chave_acesso
+AWS_SECRET_ACCESS_KEY=sua_chave_secreta
+EMAIL_USER=seu_email
+JWT_SECRET=sua_chave_secreta_jwt
+```
 
-bash
-Copiar
-Editar
+##### 2.3 Configurar o banco de dados
+
+###### 2.3.1 Instalar PostgreSQL Localmente
+Primeiro, se ainda não tiver o PostgreSQL instalado, você pode fazer o download e a instalação do PostgreSQL para o seu sistema operacional a partir do site oficial: PostgreSQL Downloads.
+
+###### 2.3.2 Criar o Banco de Dados
+Após a instalação do PostgreSQL, crie um novo banco de dados para a aplicação.
+
+###### 2.3.3 Adicionar as variaveis do seu banco no .env
+###### 2.3.4 Depois, execute as migrações do Prisma para criar as tabelas no banco de dados:
+
+```
+npx prisma migrate dev --name init
+```
+
+### 2.4 Rodar o backend
+Inicie o servidor backend:
+
+```
 npm run dev
-O backend estará disponível em http://localhost:4000.
+```
+O backend estará rodando em http://localhost:4000.
 
-3. Configuração do Banco de Dados
-Você pode usar o PostgreSQL localmente, ou configurar um container Docker para o banco de dados.
 
-Usando Docker
-Se você quiser rodar o banco de dados PostgreSQL usando o Docker, execute o comando abaixo:
+## 3️⃣ Configurar o Frontend
+### 3.1 Instalar dependências
+Navegue até a pasta do frontend e instale as dependências:
 
-bash
-Copiar
-Editar
-docker run --name postgres -e POSTGRES_USER=youruser -e POSTGRES_PASSWORD=yourpassword -e POSTGRES_DB=yourdb -p 5432:5432 -d postgres
-O banco de dados estará disponível na porta 5432.
+```
+cd ../front
+npm install
+```
+### 3.2 Configurar variáveis de ambiente
+Crie um arquivo .env na raiz do frontend (front) e defina a URL do backend:
 
-Passo 1: Configurar o Prisma
-Após configurar as variáveis de ambiente no backend, rode as migrações do Prisma para criar as tabelas no banco de dados:
-bash
-Copiar
-Editar
-npx prisma migrate dev
-4. Testar a aplicação
-Com o frontend rodando em http://localhost:3000 e o backend rodando em http://localhost:4000, você pode acessar a aplicação no seu navegador.
+```
+REACT_APP_BLUCONNECT_BASE_URL=http://localhost:4000
+```
 
-O frontend irá se comunicar com a API do backend, que estará acessível pela URL configurada (REACT_APP_BLUCONNECT_BASE_URL=http://localhost:4000).
+### 3.3 Rodar o frontend
+Inicie o servidor de desenvolvimento do frontend:
 
-Scripts disponíveis
-No frontend:
-npm run dev: Inicia o servidor de desenvolvimento do React.
-npm run build: Cria uma build otimizada do frontend.
-npm run test: Executa os testes do frontend.
-No backend:
-npm run dev: Inicia o servidor de desenvolvimento do NestJS.
-npm run build: Compila o backend para produção.
-npm run test: Executa os testes do backend.
-Contribuindo
-Se você deseja contribuir para o projeto, siga as etapas abaixo:
+```
+npm run dev
+```
+**O frontend estará rodando em http://localhost:3000.**
 
-Fork o repositório.
-Crie uma nova branch para a sua feature (git checkout -b feature/nova-feature).
-Faça as alterações desejadas e envie para o repositório (git push origin feature/nova-feature).
-Abra um pull request com uma descrição clara do que foi feito.
-Licença
-Este projeto é de código aberto e está licenciado sob a Licença MIT.
+## 4️⃣ Acessar a aplicação
+Agora que tanto o backend quanto o frontend estão rodando, você pode acessar a aplicação no navegador:
 
-markdown
-Copiar
-Editar
+**Frontend: http://localhost:3000** 
+**Backend: http://localhost:4000** 
 
-### Explicação:
+## 5️⃣Build e deploy (opcional)
+### 5.1 Build do frontend
+Para gerar uma versão de produção do frontend, execute:
 
-- **Configuração do Frontend e Backend**: Explica como configurar o ambiente de desenvolvimento para ambas as partes.
-- **Banco de Dados**: Inclui instruções para usar Docker para rodar o PostgreSQL.
-- **Scripts e Comandos**: Detalha como rodar o projeto e os principais scripts disponíveis.
-- **Contribuição**: Dá orientações caso alguém queira colaborar no projeto.
+
+```
+cd front
+npm run build
+
+```
+
+Depois, inicie o servidor em modo produção:
+
+```
+cd back
+npm run start
+```
+## 3.2 Build do backend
+Para gerar uma versão de produção do backend, execute:
+
+
+```
+npm run build
+```
+
+Depois, inicie o servidor em modo produção:
+
+```
+npm run start
+```
+
+### ⁉️Problemas comuns
+######  Erros de conexão com o banco de dados: Verifique se o PostgreSQL está rodando e se as credenciais no .env estão corretas.
+
+###### Erros de dependências: Execute npm install novamente em ambas as pastas (blu-connect-back e blu-connect-front).
