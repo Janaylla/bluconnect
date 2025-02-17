@@ -4,6 +4,7 @@ import {
   TravelScheduleSearchDTO,
 } from './travelSchedule.dto';
 import { PrismaService } from 'prisma/prisma.service';
+import { buildOrderByObject } from 'src/common/function';
 
 @Injectable()
 export class TravelScheduleService {
@@ -33,19 +34,7 @@ export class TravelScheduleService {
 
     const skip = (page - 1) * pageSize;
 
-    const orders = order.split('.');
-    const orderBy = {};
-    let currentLevel = orderBy;
-
-    for (let i = 0; i < orders.length; i++) {
-      const key = orders[i];
-      if (i === orders.length - 1) {
-        currentLevel[key] = asc;
-      } else {
-        currentLevel[key] = {};
-        currentLevel = currentLevel[key];
-      }
-    }
+    const orderBy = buildOrderByObject(order, asc);
     const rows = await this.prisma.travelSchedule.findMany({
       orderBy,
       take: +pageSize,

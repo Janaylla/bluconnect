@@ -39,7 +39,7 @@ export const logModels: Record<LogModel, string> = {
     BusRoute: LogModels.BusRoute,
     Login: LogModels.Login,
 };
-  
+
 export type Log = {
     id: number;
     method: LogMethod;

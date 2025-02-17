@@ -56,7 +56,6 @@ export default function CompleteTable<Type>({
           searchs={searchs}
         />}
 
-
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead style={{ backgroundColor: "#c5c5c5" }}>
@@ -77,7 +76,7 @@ export default function CompleteTable<Type>({
                       const k = orders[i];
                       currentValue = currentValue[k];
                     }
-
+                    console.log('line', line)
                     return (
                       <TableCell key={key} component="th" scope="row">
                         {transform ? transform(line, data.rows) : String(currentValue)}

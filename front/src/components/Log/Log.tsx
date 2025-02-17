@@ -40,7 +40,7 @@ const actionToIcon: Record<LogMethod, OverridableComponent<SvgIconTypeMap<{}, "s
 }> = {
   POST: Add,
   PUT: Edit,
-  DELETE: Delete
+  DELETE: Delete,
 }
 
 const getIconAction = (value: Log) => {
@@ -79,7 +79,8 @@ const columns: CompleteTableColumn[] = [
     title: "Descrição",
     key: "description",
     type: 'text',
-    transform:transmDesc
+    transform:transmDesc,
+    notOrder: true,
   },
 ];
 
