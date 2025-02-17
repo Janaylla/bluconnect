@@ -8,29 +8,12 @@ import { useEffect } from "react";
 export interface SelectPointerProps {
   onChangePointer?: (p: { lat: number; lng: number }) => void;
 }
-const SelectPointer = ({ onChangePointer }: SelectPointerProps) => {
-  const ClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        onChangePointer && onChangePointer({
-          lat: e.latlng.lat,
-          lng: e.latlng.lng,
-        });
-      },
-    });
-    return null;
-  }
-  return <>
-    <ClickHandler />
-  </>
-}
 interface MapComponentProps {
   waypoints: [number, number][];
   to?: LatLng;
   from?: LatLng;
-  selectPointer?: SelectPointerProps;
 }
-const MapComponent = ({ waypoints, selectPointer, to, from }: MapComponentProps) => {
+const MapComponent = ({ waypoints, to, from }: MapComponentProps) => {
   const position = new LatLng(-26.9334, -48.9538);
 
   return (
@@ -53,35 +36,34 @@ const MapComponent = ({ waypoints, selectPointer, to, from }: MapComponentProps)
         </Marker>
       )}
       {from && (
-        <Marker  position={from}>
+        <Marker position={from}>
         </Marker>
       )}
       <RoutingComponent waypoints={waypoints} />
-      {selectPointer && <SelectPointer {...selectPointer} />}
     </MapContainer>
   );
 };
-
 
 const RoutingComponent = ({ waypoints }: { waypoints: [number, number][] }) => {
   const map = useMap();
 
   useEffect(() => {
     if (map && waypoints.length > 0) {
+      // Remove camadas de roteamento existentes
       map.eachLayer((layer) => {
         if (layer instanceof L.Routing.Control) {
           map.removeLayer(layer);
         }
       });
 
+      // Adiciona o controle de rota sem marcadores padrão
       const routingControl = L.Routing.control({
-        waypoints: waypoints.map(
-          (point) => L.latLng(point[0], point[1])
-        ),
+        waypoints: waypoints.map((point) => L.latLng(point[0], point[1])),
         lineOptions: {
           styles: [{ color: 'blue', weight: 4 }],
           extendToWaypoints: false,
-          missingRouteTolerance: 1
+          missingRouteTolerance: 1,
+          addWaypoints: false,
         },
         routeWhileDragging: false,
         addWaypoints: false,
@@ -90,12 +72,30 @@ const RoutingComponent = ({ waypoints }: { waypoints: [number, number][] }) => {
           distanceTemplate: '',
         }),
         collapsible: true,
+        ...({
+          createMarker: (() => null),
+        })
       }).addTo(map);
 
+      // Adiciona os círculos azuis manualmente
+      waypoints.forEach((point) => {
+        L.circleMarker([point[0], point[1]], {
+          radius: 5, // Tamanho do círculo
+          fillColor: 'blue', // Cor de preenchimento
+          color: 'blue', // Cor da borda
+          weight: 1, // Espessura da borda
+          opacity: 1,
+          fillOpacity: 1,
+        }).addTo(map);
+      });
+
+      // Oculta o painel de rota
       const routePanel: any = document.querySelector('.leaflet-routing-container');
       if (routePanel) {
         routePanel.style.display = 'none';
       }
+
+      // Função de limpeza
       return () => {
         if (map && routingControl) {
           map.removeControl(routingControl);
@@ -103,8 +103,8 @@ const RoutingComponent = ({ waypoints }: { waypoints: [number, number][] }) => {
       };
     }
   }, [map, waypoints]);
+
   return null;
 };
-
 
 export default MapComponent;

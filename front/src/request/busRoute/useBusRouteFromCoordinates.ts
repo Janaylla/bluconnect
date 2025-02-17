@@ -11,7 +11,7 @@ interface RouteParams {
 
 
 const useGetListTravelSchedule = (params: RouteParams) => {
-  return useQuery([`travelSchedule`], async (): Promise<OutputData<any>> => {
+  return useQuery([`travelSchedule`], async (): Promise<any[]> => {
     const response = await api.get("/bus-routes/from-coordinates", {
       params,
     },);

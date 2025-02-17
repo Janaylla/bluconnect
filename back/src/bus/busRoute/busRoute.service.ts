@@ -59,7 +59,6 @@ export class BusRouteService {
     const toPossibily = await this.prisma.busRoute.findMany({
       where: { busStopId: +from_id },
     });
-
     const from = await this.prisma.busRoute.findFirst({
       where: {
         OR: toPossibily.map((b) => ({

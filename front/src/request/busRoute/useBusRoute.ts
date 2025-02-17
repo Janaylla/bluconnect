@@ -22,6 +22,8 @@ const useBusRoute = ({ from_id, to_id }: QueryBusRoute) => {
       params: { from_id, to_id },
     });
     return response.data;
+  }, {
+    enabled: !!(from_id && to_id)
   });
 };
 export default useBusRoute;
